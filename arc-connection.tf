@@ -31,3 +31,53 @@ resource "null_resource" "arc-connection" {
     interpreter = ["bash", "-c"]
   }
 }
+
+resource "azurerm_role_assignment" "thre" {
+  depends_on = [
+    null_resource.arc-connection
+  ]
+  count                = var.connect_to_arc == false ? 0 : 1
+  principal_id         = data.azuread_group.aks_cluster_admin.object_id
+  role_definition_name = "Azure Arc Kubernetes Cluster Admin"
+  scope                = "/subscriptions/${var.az_subscription_id}/resourceGroups/${module.resourcegroup_for_arc[0].name}/providers/Microsoft.Kubernetes/connectedClusters/${module.eks.name}"
+}
+
+resource "azurerm_role_assignment" "four" {
+  depends_on = [
+    null_resource.arc-connection
+  ]
+  count                = var.connect_to_arc == false ? 0 : 1
+  principal_id         = data.azuread_group.aks_cluster_admin.object_id
+  role_definition_name = "Kubernetes Cluster - Azure Arc Onboarding"
+  scope                = "/subscriptions/${var.az_subscription_id}/resourceGroups/${module.resourcegroup_for_arc[0].name}/providers/Microsoft.Kubernetes/connectedClusters/${module.eks.name}"
+}
+
+resource "azurerm_role_assignment" "five" {
+  depends_on = [
+    null_resource.arc-connection
+  ]
+  count                = var.connect_to_arc == false ? 0 : 1
+  principal_id         = data.azuread_group.aks_cluster_admin.object_id
+  role_definition_name = "Microsoft.Kubernetes connected cluster role"
+  scope                = "/subscriptions/${var.az_subscription_id}/resourceGroups/${module.resourcegroup_for_arc[0].name}/providers/Microsoft.Kubernetes/connectedClusters/${module.eks.name}"
+}
+
+resource "azurerm_role_assignment" "six" {
+  depends_on = [
+    null_resource.arc-connection
+  ]
+  count                = var.connect_to_arc == false ? 0 : 1
+  principal_id         = data.azuread_group.aks_cluster_admin.object_id
+  role_definition_name = "Azure Arc Kubernetes Admin"
+  scope                = "/subscriptions/${var.az_subscription_id}/resourceGroups/${module.resourcegroup_for_arc[0].name}/providers/Microsoft.Kubernetes/connectedClusters/${module.eks.name}"
+}
+
+resource "azurerm_role_assignment" "seven" {
+  depends_on = [
+    null_resource.arc-connection
+  ]
+  count                = var.connect_to_arc == false ? 0 : 1
+  principal_id         = data.azuread_group.aks_cluster_admin.object_id
+  role_definition_name = "Azure Arc Enabled Kubernetes Cluster User Role"
+  scope                = "/subscriptions/${var.az_subscription_id}/resourceGroups/${module.resourcegroup_for_arc[0].name}/providers/Microsoft.Kubernetes/connectedClusters/${module.eks.name}"
+}

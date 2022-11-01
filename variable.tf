@@ -49,3 +49,7 @@ variable "az_location_shortname" {
   type    = string
   default = "weu"
 }
+
+variable "az_subscription_id" {
+  type = string
+}
