@@ -1,0 +1,27 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMvakNDQWVhZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1URXdNVEV5TURRMU1Gb1hEVE15TVRBeU9URXlNRFExTUZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBT2hVCnpQdVBlQVBmanJjYzhqSTlWMzQ0aUNNMC9ubmZsUWtHK1NPb2s3TElOT3ZRN0ZOTmhkWXU3ZEg5U1Vtb0UrSWIKeFI4NkRjaElrdi82WVFCcDVGaWpEZXNVVFNwUUdlVWpiUlhycU9yWExuTWhhUDRlZE10bG5jdGh5US9TRldQMgowWllId2Vick5UNmYrMlNZakk5TGNGOS9MUVZTb1pqdE5qM3Q2c3VXaTdXM09BSzdxOHRaT1cvZ1V0eDB0a3l2CjlXczR0ZVJkZStuSEo4V1FxQ2lyYmt0ZnFqSC9LZjBsdkRacUNjOTJiUTVvTTU2eTVBM0ZpdXF2bnhoeUpzcjIKbzVPVUxkdHFyVVVodkVkNzRzS1AreXlLNFlSV1loWTB3aTRoMVZGTDZJbnZKZkFoU1IwSE1EUG15djFSU1NRTQo5Ykk5MGZKaDZpS3ZmeDB3dUw4Q0F3RUFBYU5aTUZjd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZFM2U1Yk9yRkNkTHJ5a3VraWNxWmp2bkVEQk9NQlVHQTFVZEVRUU8KTUF5Q0NtdDFZbVZ5Ym1WMFpYTXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBTUpDV0xaK1dmak9pM2JMRVZLYgpXa0J0MUFkN3M0SElsVlVleEtNYlhEVTBpZ1huK2ZoWVNkTktFenJvZzZyMEdEeFZmbHFTajdjTmt5RklvZ2pJCkxpbEUyc01EWWV4azVBTWcrcS91cDg5TXBGNDRHN01LWmVKSFNWNGJ2OE5ZbUFuQWJicmJPTVVSUlpUelp2R3oKN0c1bEFwc1IyVlFMVWQ5bEpDYVVMMTlvUlJsQytCYytqcnVDeE0ybFExbW94dGlFd2RZSWYxcjZlTUVCU1FHegowZ3RBSkI4VHhSRXRROHROZFMzMUFYTUxIZG43c0xXZ3owYVh0ZXV3WERpVlNpSFF6bXVVVFFNc0QwWHByU0xDCmJ4Z3pPSzVhS2JScERQeGJnN1Fna3ptM042Snc5Z1BnTUVYS2IvNmZGS0xQNzBwVGN5NzQ5UnExUFdlNTlRRC8KYlI4PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    server: https://A12C599CE3CC37C8EAF68009B3263271.gr7.eu-central-1.eks.amazonaws.com
+  name: arn:aws:eks:eu-central-1:092693892285:cluster/tname-eks-myproje-env-euc1
+contexts:
+- context:
+    cluster: arn:aws:eks:eu-central-1:092693892285:cluster/tname-eks-myproje-env-euc1
+    user: arn:aws:eks:eu-central-1:092693892285:cluster/tname-eks-myproje-env-euc1
+  name: arn:aws:eks:eu-central-1:092693892285:cluster/tname-eks-myproje-env-euc1
+current-context: arn:aws:eks:eu-central-1:092693892285:cluster/tname-eks-myproje-env-euc1
+kind: Config
+preferences: {}
+users:
+- name: arn:aws:eks:eu-central-1:092693892285:cluster/tname-eks-myproje-env-euc1
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args:
+      - --region
+      - eu-central-1
+      - eks
+      - get-token
+      - --cluster-name
+      - tname-eks-myproje-env-euc1
+      command: aws

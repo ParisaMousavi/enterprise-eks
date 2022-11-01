@@ -27,5 +27,25 @@ variable "environment" {
 
 variable "terraform_remote_state_bucket" {
   type    = string
-  default = "terraform-myproje-euc1-dev"
+  default = "tname-myproje-terraform-dev-euc1"
+}
+
+variable "connect_to_arc" {
+  type    = bool
+  default = true
+}
+
+variable "region" {
+  type    = string
+  default = "eu-central-1"
+}
+
+variable "az_location" {
+  type    = string
+  default = "westeurope"
+}
+
+variable "az_location_shortname" {
+  type    = string
+  default = "weu"
 }

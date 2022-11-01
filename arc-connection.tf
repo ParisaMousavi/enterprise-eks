@@ -1,0 +1,33 @@
+module "rg_name_for_arc" {
+  source             = "github.com/ParisaMousavi/az-naming//rg?ref=2022.10.07"
+  prefix             = var.prefix
+  name               = "for-arc"
+  stage              = var.environment
+  location_shortname = var.az_location_shortname
+}
+
+module "resourcegroup_for_arc" {
+  # https://{PAT}@dev.azure.com/{organization}/{project}/_git/{repo-name}
+  source   = "github.com/ParisaMousavi/az-resourcegroup?ref=2022.10.07"
+  count    = var.connect_to_arc == false ? 0 : 1
+  location = var.az_location
+  name     = module.rg_name_for_arc.result
+  tags = {
+    CostCenter = "ABC000CBA"
+    By         = "parisamoosavinezhad@hotmail.com"
+  }
+}
+
+resource "null_resource" "arc-connection" {
+  depends_on = [module.eks]
+  count      = var.connect_to_arc == false ? 0 : 1
+  triggers = {
+    always_run = timestamp()
+    hash       = sha256(file("${path.module}/arc-connection/bash.sh"))
+  }
+  // The order of input values are important for bash
+  provisioner "local-exec" {
+    command     = "chmod +x ${path.module}/arc-connection/bash.sh ;${path.module}/arc-connection/bash.sh ${module.eks.name} ${var.az_location} ${var.region} ${module.resourcegroup_for_arc[0].name}"
+    interpreter = ["bash", "-c"]
+  }
+}
