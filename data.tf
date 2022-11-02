@@ -15,3 +15,5 @@ data "azuread_group" "aks_cluster_admin" {
   display_name     = "AKS Cluster Admin"
   security_enabled = true
 }
+
+data "aws_caller_identity" "current" {}

@@ -19,8 +19,11 @@ module "resourcegroup_for_arc" {
 }
 
 resource "null_resource" "arc-connection" {
-  depends_on = [module.eks]
-  count      = var.connect_to_arc == false ? 0 : 1
+  depends_on = [
+    module.eks,
+    null_resource.get_eks_credentials
+  ]
+  count = var.connect_to_arc == false ? 0 : 1
   triggers = {
     always_run = timestamp()
     hash       = sha256(file("${path.module}/arc-connection/bash.sh"))
