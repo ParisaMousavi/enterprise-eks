@@ -17,3 +17,7 @@ data "azuread_group" "aks_cluster_admin" {
 }
 
 data "aws_caller_identity" "current" {}
+
+data "aws_iam_user" "paisa" {
+  user_name = "parisam"
+}

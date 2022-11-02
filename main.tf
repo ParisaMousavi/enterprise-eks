@@ -82,7 +82,7 @@ resource "null_resource" "get_eks_credentials" {
   triggers   = { always_run = timestamp() }
   // The order of input values are important for bash
   provisioner "local-exec" {
-    command     = "chmod +x ${path.module}/get-credentials/bash.sh ;${path.module}/get-credentials/bash.sh"
+    command     = "chmod +x ${path.module}/get-credentials/bash.sh ;${path.module}/get-credentials/bash.sh ${var.region} ${module.name.eks_name} ${data.aws_iam_user.paisa.arn}"
     interpreter = ["bash", "-c"]
   }
 }
