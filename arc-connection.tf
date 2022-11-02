@@ -21,7 +21,8 @@ module "resourcegroup_for_arc" {
 resource "null_resource" "arc-connection" {
   depends_on = [
     module.eks,
-    null_resource.get_eks_credentials
+    null_resource.get_eks_credentials,
+    module.eks_node
   ]
   count = var.connect_to_arc == false ? 0 : 1
   triggers = {
