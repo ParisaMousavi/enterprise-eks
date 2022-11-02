@@ -32,7 +32,7 @@ variable "terraform_remote_state_bucket" {
 
 variable "connect_to_arc" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "region" {

@@ -76,24 +76,24 @@ echo "Connecting the cluster to Azure Arc"
 echo "az connectedk8s connect --name $eksclustername --resource-group $resourcegroupnameforarc --location $location --custom-locations-oid 22cfa2da-1491-4abc-adb3-c31c8c74cefa"
 az connectedk8s connect --name $eksclustername --resource-group $resourcegroupnameforarc --location $location --custom-locations-oid "22cfa2da-1491-4abc-adb3-c31c8c74cefa"
 
-# Add the official stable repo
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
+# # Add the official stable repo
+# helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+# helm repo update
 
-export namespace='hello-arc'
+# export namespace='hello-arc'
 
-# Use Helm to deploy an NGINX ingress controller
-helm upgrade --install ingress-nginx ingress-nginx \
-  --repo https://kubernetes.github.io/ingress-nginx \
-  --namespace $namespace
+# # Use Helm to deploy an NGINX ingress controller
+# helm upgrade --install ingress-nginx ingress-nginx \
+#   --repo https://kubernetes.github.io/ingress-nginx \
+#   --namespace $namespace
 
-az k8s-configuration flux create -g "tname-rg-for-arc-env-weu" \
--c "tname-eks-myproje-env-euc1" \
--n cluster-config \
---namespace cluster-config \
--t connectedClusters \
---scope cluster \
--u https://github.com/Azure/gitops-flux2-kustomize-helm-mt \
---branch main  \
---kustomization name=infra path=./infrastructure prune=true \
---kustomization name=apps path=./apps/staging prune=true dependsOn=\["infra"\]
+# az k8s-configuration flux create -g "tname-rg-for-arc-env-weu" \
+# -c "tname-eks-myproje-env-euc1" \
+# -n cluster-config \
+# --namespace cluster-config \
+# -t connectedClusters \
+# --scope cluster \
+# -u https://github.com/Azure/gitops-flux2-kustomize-helm-mt \
+# --branch main  \
+# --kustomization name=infra path=./infrastructure prune=true \
+# --kustomization name=apps path=./apps/staging prune=true dependsOn=\["infra"\]
