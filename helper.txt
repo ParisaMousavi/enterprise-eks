@@ -1,0 +1,41 @@
+
+export KUBECONFIG=./config
+
+aws eks update-kubeconfig --region eu-central-1 --name tname-eks-myproje-env-euc1
+
+az k8s-extension list --cluster-name tname-eks-myproje-env-euc1 --resource-group tname-rg-for-arc-env-weu --cluster-type connectedClusters
+
+az k8s-configuration flux delete --cluster-name tname-eks-myproje-env-euc1 \
+                                 --cluster-type connectedClusters \
+                                 --name cluster-config \
+                                 --resource-group tname-rg-for-arc-env-weu \
+                                 --yes \
+                                 --force
+
+az k8s-extension create --name flux \
+  --extension-type Microsoft.Flux \
+   --scope cluster \
+   --cluster-name tname-eks-myproje-env-euc1 \
+   --resource-group tname-rg-for-arc-env-weu \
+    --cluster-type connectedClusters
+
+
+az k8s-configuration flux create \
+--resource-group "tname-rg-for-arc-env-weu" \
+--cluster-name "tname-eks-myproj-env-euc1" \
+--name cluster-config \
+--namespace cluster-config \
+--cluster-type connectedClusters \
+--scope cluster \
+--kind git \
+-u https://github.com/Azure/gitops-flux2-kustomize-helm-mt \
+--branch main  \
+--kustomization name=infra path=./infrastructure prune=true \
+--kustomization name=apps path=./apps/staging prune=true dependsOn=\["infra"\] \
+--debug
+
+
+az k8s-extension show --resource-group "tname-rg-for-arc-env-weu" \
+--name flux \
+--cluster-type connectedClusters \
+--cluster-name "tname-eks-myproje-env-euc1"

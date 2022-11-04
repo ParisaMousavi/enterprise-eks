@@ -85,3 +85,24 @@ resource "azurerm_role_assignment" "seven" {
   role_definition_name = "Azure Arc Enabled Kubernetes Cluster User Role"
   scope                = "/subscriptions/${var.az_subscription_id}/resourceGroups/${module.resourcegroup_for_arc[0].name}/providers/Microsoft.Kubernetes/connectedClusters/${module.eks.name}"
 }
+
+
+resource "null_resource" "arc-extension-flux" {
+  depends_on = [
+    module.eks,
+    null_resource.get_eks_credentials,
+    module.eks_node,
+    null_resource.arc-connection,
+    azurerm_role_assignment.seven
+  ]
+  count = var.install_arc_flux == false ? 0 : 1
+  triggers = {
+    always_run = timestamp()
+    hash       = sha256(file("${path.module}/arc-extension-flux/bash.sh"))
+  }
+  // The order of input values are important for bash
+  provisioner "local-exec" {
+    command     = "chmod +x ${path.module}/arc-extension-flux/bash.sh ;${path.module}/arc-extension-flux/bash.sh ${module.eks.name} ${module.resourcegroup_for_arc[0].name}"
+    interpreter = ["bash", "-c"]
+  }
+}

@@ -7,7 +7,7 @@ variable "prefix" {
 variable "name" {
   description = "Project name"
   type        = string
-  default     = "myproje"
+  default     = "myproj"
 }
 
 variable "region_shortname" {
@@ -31,6 +31,12 @@ variable "terraform_remote_state_bucket" {
 }
 
 variable "connect_to_arc" {
+  type    = bool
+  default = true
+}
+
+
+variable "install_arc_flux" {
   type    = bool
   default = true
 }

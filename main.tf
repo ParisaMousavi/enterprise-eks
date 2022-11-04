@@ -93,6 +93,16 @@ module "eks_node" {
   node_group_name = format("%s-node-1", module.name.eks_name)
   cluster_name    = module.eks.name
   instance_types  = ["t3.medium"]
-  disk_size       = 5
+  disk_size       = 20
   subnet_ids      = [data.terraform_remote_state.network.outputs.network.public_subnet_ids["public_1"], data.terraform_remote_state.network.outputs.network.public_subnet_ids["public_2"]]
+  scaling_config = {
+    desired_size = 2
+    max_size     = 5
+    min_size     = 1
+  }
+  additional_tags = {
+    CostCenter = var.costcenter
+    By         = "parisamoosavinezhad@hotmail.com"
+    Name       = format("%s-node-1", module.name.eks_name)
+  }
 }
