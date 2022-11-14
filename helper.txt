@@ -1,7 +1,7 @@
 
 export KUBECONFIG=./config
 
-aws eks update-kubeconfig --region eu-central-1 --name tname-eks-myproje-env-euc1
+aws eks update-kubeconfig --region eu-central-1 --name tname-eks-myproj-env-euc1
 
 az k8s-extension list --cluster-name tname-eks-myproje-env-euc1 --resource-group tname-rg-for-arc-env-weu --cluster-type connectedClusters
 
@@ -39,3 +39,8 @@ az k8s-extension show --resource-group "tname-rg-for-arc-env-weu" \
 --name flux \
 --cluster-type connectedClusters \
 --cluster-name "tname-eks-myproje-env-euc1"
+
+
+https://docs.aws.amazon.com/eks/latest/userguide/associate-service-account-role.html
+
+https://github.com/mamtajha-ts/k8s-4days.git

@@ -38,6 +38,21 @@ variable "connect_to_arc" {
 
 variable "install_arc_flux" {
   type    = bool
+  default = false
+}
+
+variable "install_arc_monitor" {
+  type    = bool
+  default = false
+}
+
+variable "install_arc_policy" {
+  type    = bool
+  default = false
+}
+
+variable "install_arc_custom_location" {
+  type    = bool
   default = true
 }
 

@@ -106,3 +106,83 @@ resource "null_resource" "arc-extension-flux" {
     interpreter = ["bash", "-c"]
   }
 }
+
+
+resource "null_resource" "arc-extension-monitor" {
+  depends_on = [
+    module.eks,
+    null_resource.get_eks_credentials,
+    module.eks_node,
+    null_resource.arc-connection,
+    azurerm_role_assignment.seven
+  ]
+  count = var.install_arc_monitor == false ? 0 : 1
+  triggers = {
+    always_run = timestamp()
+    hash       = sha256(file("${path.module}/arc-extension-monitoring/bash.sh"))
+  }
+  // The order of input values are important for bash
+  provisioner "local-exec" {
+    command     = "chmod +x ${path.module}/arc-extension-monitoring/bash.sh ;${path.module}/arc-extension-monitoring/bash.sh ${module.eks.name} ${module.resourcegroup_for_arc[0].name}"
+    interpreter = ["bash", "-c"]
+  }
+}
+
+resource "null_resource" "arc-extension-policy" {
+  depends_on = [
+    module.eks,
+    null_resource.get_eks_credentials,
+    module.eks_node,
+    null_resource.arc-connection,
+    azurerm_role_assignment.seven
+  ]
+  count = var.install_arc_policy == false ? 0 : 1
+  triggers = {
+    always_run = timestamp()
+    hash       = sha256(file("${path.module}/arc-extension-policy/bash.sh"))
+  }
+  // The order of input values are important for bash
+  provisioner "local-exec" {
+    command     = "chmod +x ${path.module}/arc-extension-policy/bash.sh ;${path.module}/arc-extension-policy/bash.sh ${module.eks.name} ${module.resourcegroup_for_arc[0].name} ${var.region}"
+    interpreter = ["bash", "-c"]
+  }
+}
+
+module "arc_custom_location" {
+  source           = "github.com/ParisaMousavi/aws-naming?ref=main"
+  prefix           = var.prefix
+  name             = var.name
+  environment      = var.environment
+  region_shortname = var.region_shortname
+  purpose          = "cloc"
+}
+
+module "arc_dc_extension" {
+  source           = "github.com/ParisaMousavi/aws-naming?ref=main"
+  prefix           = var.prefix
+  name             = var.name
+  environment      = var.environment
+  region_shortname = var.region_shortname
+  purpose          = "dcext"
+}
+
+# arc_custom_location arc_dc_extension
+resource "null_resource" "arc-extension-custome-location" {
+  depends_on = [
+    module.eks,
+    null_resource.get_eks_credentials,
+    module.eks_node,
+    null_resource.arc-connection,
+    azurerm_role_assignment.seven
+  ]
+  count = var.install_arc_custom_location == false ? 0 : 1
+  triggers = {
+    always_run = timestamp()
+    hash       = sha256(file("${path.module}/arc-extension-location/bash.sh"))
+  }
+  // The order of input values are important for bash
+  provisioner "local-exec" {
+    command     = "chmod +x ${path.module}/arc-extension-location/bash.sh ;${path.module}/arc-extension-location/bash.sh ${module.eks.name} ${module.resourcegroup_for_arc[0].name} ${var.region} ${module.arc_dc_extension.arc_dc_extension} ${module.arc_custom_location.arc_custom_location}"
+    interpreter = ["bash", "-c"]
+  }
+}
