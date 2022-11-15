@@ -19,6 +19,23 @@ module "eks" {
   }
 }
 
+# data "aws_availability_zones" "available" {
+#   state = "available"
+# }
+
+# resource "aws_ebs_volume" "this" {
+#   availability_zone = data.aws_availability_zones.available.names[0]
+#   size              = 1
+# }
+
+# resource "aws_volume_attachment" "this" {
+#   device_name = "/dev/sdh"
+#   volume_id   = aws_ebs_volume.this.id
+#   instance_id = module.eks.id
+# }
+
+
+
 # 1
 # for consol permission
 # The permissions are copy & paste from this link
@@ -92,11 +109,11 @@ module "eks_node" {
   source          = "github.com/ParisaMousavi/aws-eks-node?ref=main"
   node_group_name = format("%s-node-1", module.name.eks_name)
   cluster_name    = module.eks.name
-  instance_types  = ["t3.medium"]
-  disk_size       = 20
+  instance_types  = ["t3.large"]
+  disk_size       = 300
   subnet_ids      = [data.terraform_remote_state.network.outputs.network.public_subnet_ids["public_1"], data.terraform_remote_state.network.outputs.network.public_subnet_ids["public_2"]]
   scaling_config = {
-    desired_size = 2
+    desired_size = 3
     max_size     = 5
     min_size     = 1
   }

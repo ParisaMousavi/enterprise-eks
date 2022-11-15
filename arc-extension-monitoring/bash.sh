@@ -7,7 +7,7 @@ logAnalyticsWorkspaceResourceID=$(az monitor log-analytics workspace show --reso
 logAnalyticsWorkspaceResourceID="logAnalyticsWorkspaceResourceID="$logAnalyticsWorkspaceResourceID
 echo $logAnalyticsWorkspaceResourceID
 
-az k8s-extension create --name azuremonitor-containers \
+MSYS_NO_PATHCONV=1 az k8s-extension create --name azuremonitor-containers \
 --cluster-name $eksclustername \
 --resource-group $resourcegroupnameforarc \
 --cluster-type connectedClusters \
@@ -15,8 +15,8 @@ az k8s-extension create --name azuremonitor-containers \
 --configuration-settings $logAnalyticsWorkspaceResourceID
 
 
-eksclustername="tname-eks-myproj-env-euc1"
-resourcegroupnameforarc="tname-rg-for-arc-env-weu"
+# eksclustername="tname-eks-myproj-env-euc1"
+# resourcegroupnameforarc="tname-rg-for-arc-env-weu"
 
 # Links
 # - https://www.techtarget.com/searchitoperations/tutorial/How-to-use-Azure-Arc-enabled-Kubernetes-step-by-step

@@ -12,6 +12,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "3.22.0"
     }
+    azapi = {
+      source  = "Azure/azapi"
+      version = "1.0.0"
+    }
   }
   backend "s3" {
     bucket = "tname-myproje-terraform-dev-euc1"
@@ -39,5 +43,6 @@ provider "azuread" {
   # Configuration options
 }
 
-
-# aws eks update-kubeconfig --region eu-central-1 --name tname-eks-myproje-env-euc1
+provider "azapi" {
+  # Configuration options
+}

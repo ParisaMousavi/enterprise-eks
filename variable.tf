@@ -43,7 +43,7 @@ variable "install_arc_flux" {
 
 variable "install_arc_monitor" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "install_arc_policy" {
@@ -54,6 +54,11 @@ variable "install_arc_policy" {
 variable "install_arc_custom_location" {
   type    = bool
   default = true
+}
+
+variable "install_arc_data_controller" {
+  type    = bool
+  default = false
 }
 
 variable "region" {

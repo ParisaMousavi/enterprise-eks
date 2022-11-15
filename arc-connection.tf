@@ -166,7 +166,35 @@ module "arc_dc_extension" {
   purpose          = "dcext"
 }
 
-# arc_custom_location arc_dc_extension
+
+# in kheili be dard nakhord ta bad roosh kar konam
+# reference link : https://learn.microsoft.com/en-us/azure/templates/microsoft.extendedlocation/customlocations?pivots=deployment-language-terraform
+# resource "azapi_resource" "arc_custom_location" {
+#   type = "Microsoft.ExtendedLocation/customLocations@2021-08-31-preview"
+#   name = module.arc_custom_location.arc_custom_location
+#   location = var.location
+#   parent_id = module.rg_name_for_arc.id
+#   tags = {
+#     CostCenter = "ABC000CBA"
+#     By         = "parisamoosavinezhad@hotmail.com"
+#   }
+#   identity {
+#     type =  "SystemAssigned"
+#   }
+#   body = jsonencode({
+#     properties = {
+#       clusterExtensionIds = [
+#         "/subscriptions/e75710b2-d656-4ee7-bc64-d1b371656208/resourceGroups/tname-rg-for-arc-env-weu/providers/Microsoft.Kubernetes/connectedClusters/tname-eks-myproj-env-euc1/providers/Microsoft.KubernetesConfiguration/extensions/tname-dcext-myproj-env-euc1"
+#       ]
+#       displayName = module.arc_custom_location.arc_custom_location
+#       hostResourceId = "/subscriptions/e75710b2-d656-4ee7-bc64-d1b371656208/resourceGroups/tname-rg-for-arc-env-weu/providers/Microsoft.Kubernetes/connectedClusters/tname-eks-myproj-env-euc1"
+#       hostType = "Kubernetes"
+#       namespace = "tname-cloc-myproj-env-euc1"
+#     }
+#   })
+# }
+
+
 resource "null_resource" "arc-extension-custome-location" {
   depends_on = [
     module.eks,
@@ -186,3 +214,47 @@ resource "null_resource" "arc-extension-custome-location" {
     interpreter = ["bash", "-c"]
   }
 }
+
+data "azapi_resource" "arc_custom_location" {
+  depends_on = [
+    module.eks,
+    null_resource.get_eks_credentials,
+    module.eks_node,
+    null_resource.arc-connection,
+    azurerm_role_assignment.seven,
+    null_resource.arc-extension-custome-location
+  ]
+  count     = var.install_arc_custom_location == false ? 0 : 1
+  name      = module.arc_custom_location.arc_custom_location
+  parent_id = module.resourcegroup_for_arc[0].id
+  type      = "Microsoft.ExtendedLocation/customLocations@2021-08-31-preview"
+}
+
+# resource "azurerm_role_assignment" "custom_location_contributor" {
+#   count                = var.install_arc_custom_location == false && length(data.azapi_resource.arc_custom_location) == 0 ? 0 : 1
+#   principal_id         = data.azapi_resource.arc_custom_location[0].identity[0].principal_id
+#   role_definition_name = "Contributor"
+#   scope                = module.resourcegroup_for_arc[0].id
+# }
+
+# resource "null_resource" "arc-extension-data-controller" {
+#   depends_on = [
+#     module.eks,
+#     null_resource.get_eks_credentials,
+#     module.eks_node,
+#     null_resource.arc-connection,
+#     azurerm_role_assignment.seven,
+#     null_resource.arc-extension-custome-location
+#   ]
+#   count = var.install_arc_data_controller == false ? 0 : 1
+#   triggers = {
+#     always_run = timestamp()
+#     hash       = sha256(file("${path.module}/arc-extension-dc/bash.sh"))
+#   }
+#   // The order of input values are important for bash
+#   provisioner "local-exec" {
+#     command     = "chmod +x ${path.module}/arc-extension-dc/bash.sh ;${path.module}/arc-extension-dc/bash.sh ${module.eks.name} ${module.resourcegroup_for_arc[0].name} ${var.region} ${module.arc_dc_extension.arc_dc_extension} ${module.arc_custom_location.arc_custom_location}"
+#     interpreter = ["bash", "-c"]
+#   }
+# }
+

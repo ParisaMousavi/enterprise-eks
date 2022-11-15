@@ -6,6 +6,14 @@ adsExtensionName=$4
 # Custom Location name is used for custom-location's and data-extension's namespace.
 customLocationName=$5
 
+echo "--------------------------------------"
+echo "eksclustername="$eksclustername
+echo "resourcegroupnameforarc="$resourcegroupnameforarc
+echo "region="$region
+echo "adsExtensionName="$adsExtensionName
+echo "customLocationName="$customLocationName
+echo "--------------------------------------"
+
 aws eks update-kubeconfig --region $region --name $eksclustername
 
 az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
@@ -97,7 +105,10 @@ extensionId=$(az k8s-extension show --name ${adsExtensionName} --cluster-type co
 # reference link : https://github.com/fengzhou-msft/azure-cli/blob/ea149713de505fa0f8ae6bfa5d998e12fc8ff509/doc/use_cli_with_git_bash.md
 # MSYS_NO_PATHCONV=1 because of Git bash auto translate
 # Create the custom location
-MSYS_NO_PATHCONV=1 az customlocation create -n ${customLocationName} -g ${resourcegroupnameforarc} --namespace ${customLocationName} --host-resource-id ${provisionedClusterId} --cluster-extension-ids ${extensionId}
+MSYS_NO_PATHCONV=1 az customlocation create -n ${customLocationName} -g ${resourcegroupnameforarc} \
+    --namespace ${customLocationName} --host-resource-id ${provisionedClusterId} \
+    --cluster-extension-ids ${extensionId} --assign-identity "SystemAssigned" \
+    --location westeurope
 
 az customlocation show -n ${customLocationName} -g ${resourcegroupnameforarc}
 
