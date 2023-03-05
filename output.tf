@@ -11,5 +11,5 @@ output "eks_console_group_arn" {
 }
 
 output "eks_arc_resourcegroup_name" {
-  value = module.resourcegroup_for_arc[0].name
+  value = var.connect_to_arc == true ? module.resourcegroup_for_arc[0].name : null
 }
