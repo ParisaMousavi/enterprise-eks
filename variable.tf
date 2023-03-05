@@ -32,7 +32,7 @@ variable "terraform_remote_state_bucket" {
 
 variable "connect_to_arc" {
   type    = bool
-  default = true
+  default = false
 }
 
 
@@ -43,7 +43,7 @@ variable "install_arc_flux" {
 
 variable "install_arc_monitor" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "install_arc_policy" {
@@ -53,7 +53,7 @@ variable "install_arc_policy" {
 
 variable "install_arc_custom_location" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "install_arc_data_controller" {

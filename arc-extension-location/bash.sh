@@ -94,7 +94,12 @@ echo "--------------------------------------"
 # dc's namespace must be the same as custom location's namespace
 # reference link for creating a custom location : https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/custom-locations
 
-az k8s-extension create --cluster-name ${eksclustername} --resource-group ${resourcegroupnameforarc} --name ${adsExtensionName} --cluster-type connectedClusters --extension-type microsoft.arcdataservices --auto-upgrade false --scope cluster --release-namespace ${customLocationName} --config Microsoft.CustomLocation.ServiceAccount=sa-arc-bootstrapper
+az k8s-extension create \
+--cluster-name ${eksclustername} \
+--resource-group ${resourcegroupnameforarc} --name ${adsExtensionName} \
+--cluster-type connectedClusters --extension-type microsoft.arcdataservices \
+--auto-upgrade false --scope cluster --release-namespace ${customLocationName} \
+--config Microsoft.CustomLocation.ServiceAccount=sa-arc-bootstrapper
 
 # Get the Azure Resource Manager identifier of the Azure Arc-enabled Kubernetes cluster
 provisionedClusterId=$(az connectedk8s show -n $eksclustername -g $resourcegroupnameforarc  --query id -o tsv)
