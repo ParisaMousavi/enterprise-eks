@@ -113,7 +113,7 @@ module "eks_node" {
   disk_size       = 300
   subnet_ids      = [data.terraform_remote_state.network.outputs.network.public_subnet_ids["public_1"], data.terraform_remote_state.network.outputs.network.public_subnet_ids["public_2"]]
   scaling_config = {
-    desired_size = 3
+    desired_size = 1
     max_size     = 5
     min_size     = 1
   }
