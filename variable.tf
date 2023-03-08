@@ -79,3 +79,13 @@ variable "az_location_shortname" {
 variable "az_subscription_id" {
   type = string
 }
+
+variable "remote_state_storage_account_name" {
+  type    = string
+  default = "parisatfstateaziac2weu"
+}
+
+variable "remote_state_resource_group_name" {
+  type    = string
+  default = "tfstate"
+}

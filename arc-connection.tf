@@ -123,8 +123,13 @@ resource "null_resource" "arc-extension-monitor" {
   }
   // The order of input values are important for bash
   provisioner "local-exec" {
-    command     = "chmod +x ${path.module}/arc-extension-monitoring/bash.sh ;${path.module}/arc-extension-monitoring/bash.sh ${module.eks.name} ${module.resourcegroup_for_arc[0].name}"
+    command     = "chmod +x ${path.module}/arc-extension-monitoring/bash.sh ;${path.module}/arc-extension-monitoring/bash.sh"
     interpreter = ["bash", "-c"]
+    environment = {
+      logAnalyticsWorkspaceResourceID = data.terraform_remote_state.monitoring.outputs.log_analytics_workspace_id
+      eksclustername                  = module.eks.name
+      resourcegroupnameforarc         = module.resourcegroup_for_arc[0].name
+    }
   }
 }
 
