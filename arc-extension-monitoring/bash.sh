@@ -1,11 +1,13 @@
-eksclustername=$1
-resourcegroupnameforarc=$2
+# eksclustername=$1
+# resourcegroupnameforarc=$2
 
 az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
 
-logAnalyticsWorkspaceResourceID=$(az monitor log-analytics workspace show --resource-group projn-rg-monitoring-dev-weu --workspace-name projn-log-monitoring-dev-weu --query id -o tsv)
-logAnalyticsWorkspaceResourceID="logAnalyticsWorkspaceResourceID="$logAnalyticsWorkspaceResourceID
+# logAnalyticsWorkspaceResourceID=$(az monitor log-analytics workspace show --resource-group projn-rg-monitoring-dev-weu --workspace-name projn-log-monitoring-dev-weu --query id -o tsv)
+# logAnalyticsWorkspaceResourceID="logAnalyticsWorkspaceResourceID="$logAnalyticsWorkspaceResourceID
 echo $logAnalyticsWorkspaceResourceID
+echo $eksclustername
+echo $resourcegroupnameforarc
 
 MSYS_NO_PATHCONV=1 az k8s-extension create --name azuremonitor-containers \
 --cluster-name $eksclustername \
