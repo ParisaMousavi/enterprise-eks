@@ -4,11 +4,6 @@
 az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
 
 # logAnalyticsWorkspaceResourceID=$(az monitor log-analytics workspace show --resource-group projn-rg-monitoring-dev-weu --workspace-name projn-log-monitoring-dev-weu --query id -o tsv)
-# logAnalyticsWorkspaceResourceID="logAnalyticsWorkspaceResourceID="$logAnalyticsWorkspaceResourceID
-echo $logAnalyticsWorkspaceResourceID
-echo $eksclustername
-echo $resourcegroupnameforarc
-
 echo "Checking if you have up-to-date Azure Arc AZ CLI 'k8s-extension' extension..."
 echo "--------------------------------------------"
 az extension show --name "k8s-extension" &> extension_output
@@ -21,6 +16,14 @@ rm extension_output
 fi
 echo ""
 
+echo $logAnalyticsWorkspaceResourceID
+echo $eksclustername
+echo $resourcegroupnameforarc
+
+echo "Make config with Log Analytics Workspace ID"
+echo "--------------------------------------------"
+logAnalyticsWorkspaceResourceID="logAnalyticsWorkspaceResourceID="$logAnalyticsWorkspaceResourceID
+
 MSYS_NO_PATHCONV=1 az k8s-extension create --name azuremonitor-containers \
 --cluster-name $eksclustername \
 --resource-group $resourcegroupnameforarc \
@@ -28,9 +31,6 @@ MSYS_NO_PATHCONV=1 az k8s-extension create --name azuremonitor-containers \
 --extension-type Microsoft.AzureMonitor.Containers \
 --configuration-settings $logAnalyticsWorkspaceResourceID
 
-
-# eksclustername="tname-eks-myproj-env-euc1"
-# resourcegroupnameforarc="tname-rg-for-arc-env-weu"
 
 # Links
 # - https://www.techtarget.com/searchitoperations/tutorial/How-to-use-Azure-Arc-enabled-Kubernetes-step-by-step
