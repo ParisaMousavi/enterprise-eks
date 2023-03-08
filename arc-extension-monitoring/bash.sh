@@ -9,6 +9,18 @@ echo $logAnalyticsWorkspaceResourceID
 echo $eksclustername
 echo $resourcegroupnameforarc
 
+echo "Checking if you have up-to-date Azure Arc AZ CLI 'k8s-extension' extension..."
+echo "--------------------------------------------"
+az extension show --name "k8s-extension" &> extension_output
+if cat extension_output | grep -q "not installed"; then
+az extension add --name "k8s-extension"
+rm extension_output
+else
+az extension update --name "k8s-extension"
+rm extension_output
+fi
+echo ""
+
 MSYS_NO_PATHCONV=1 az k8s-extension create --name azuremonitor-containers \
 --cluster-name $eksclustername \
 --resource-group $resourcegroupnameforarc \
