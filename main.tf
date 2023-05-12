@@ -95,7 +95,11 @@ resource "aws_iam_group_policy_attachment" "eks_group_policy_for_console" {
 }
 
 resource "null_resource" "get_eks_credentials" {
-  depends_on = [module.eks]
+  depends_on = [
+      module.eks,
+      aws_iam_policy.eks_policy_for_console,
+      aws_iam_group_policy_attachment.eks_group_policy_for_console
+      ]
   triggers   = { always_run = timestamp() }
   // The order of input values are important for bash
   provisioner "local-exec" {
